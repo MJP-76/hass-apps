@@ -1,4 +1,4 @@
-# MJP-76 Home Assistant Apps
+# MJP's Home Assistant Apps
 
 Central repository of Home Assistant **add-ons** (apps) built and maintained by
 MJP-76. Each top-level folder is one add-on; Home Assistant's add-on store reads
