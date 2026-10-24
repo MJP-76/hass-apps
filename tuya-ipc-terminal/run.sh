@@ -30,7 +30,11 @@ if ! has_session; then
         exit 1
     fi
     echo "No session found - authenticating ${email} in ${region}..."
-    printf '%s\n' "${password}" | "${BIN}" auth add "${region}" "${email}" --password
+    # The tool reads the password with echo-off terminal I/O, so it needs a
+    # TTY even when the password comes from the configuration. 'script'
+    # provides the pseudo-terminal; the password is piped into it.
+    printf '%s\n' "${password}" \
+        | script -qec "${BIN} auth add ${region} ${email} --password" /dev/null
 fi
 
 echo "Authenticated users:"
@@ -40,5 +44,6 @@ echo "Refreshing camera discovery..."
 "${BIN}" cameras refresh || echo "Camera discovery failed - continuing with cached list."
 
 echo "Starting RTSP server on port ${port} (resolution: ${resolution})."
-echo "Streams: rtsp://<home-assistant>:${port}/<Camera_Name>"
+echo "Stream (from other add-ons): rtsp://46d52ae8-tuya-ipc-terminal:${port}/<Camera_Name>"
+echo "Stream (from your LAN): rtsp://<home-assistant>:<host-port-from-network-panel>/<Camera_Name>"
 exec "${BIN}" rtsp start --port "${port}"

@@ -24,7 +24,7 @@ RUN git apply /tmp/enable-speaker.patch \
 # --- Runtime stage ---------------------------------------------------------
 FROM alpine:3.20
 
-RUN apk add --no-cache ca-certificates jq
+RUN apk add --no-cache ca-certificates jq util-linux
 
 COPY --from=build /out/tuya-ipc-terminal /bin/tuya-ipc-terminal
 COPY LICENSE-UPSTREAM /licenses/tuya-ipc-terminal-LICENSE
