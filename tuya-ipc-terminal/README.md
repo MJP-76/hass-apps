@@ -64,18 +64,29 @@ password option and restart.
 
 ## Using the streams
 
-The add-on serves one RTSP endpoint per camera:
+The add-on serves one RTSP endpoint per camera. There are two ways to reach it:
 
-```
-rtsp://<home-assistant>:8554/<Camera_Name>
-```
+- **From another add-on** (go2rtc, Frigate, …) over the internal network — no
+  host port needed, always on container port `8554`:
+
+  ```
+  rtsp://46d52ae8-tuya-ipc-terminal:8554/<Camera_Name>
+  ```
+
+- **From your LAN** (ffplay, VLC, …) via the host port configured in the
+  add-on's **Network** panel (default **8555** — `8554` is usually taken by
+  go2rtc):
+
+  ```
+  rtsp://<home-assistant>:8555/<Camera_Name>
+  ```
 
 ### go2rtc (recommended, enables talkback)
 
 ```yaml
 streams:
   back_door:
-    - rtsp://ccab4aaf-tuya-ipc-terminal:8554/Back_door
+    - rtsp://46d52ae8-tuya-ipc-terminal:8554/Back_door
 ```
 
 With go2rtc in front, the Advanced Camera Card's two-way talk button sends your
@@ -87,7 +98,7 @@ this bridge forwards to the doorbell speaker.
 ```yaml
 camera:
   - platform: generic
-    stream_source: rtsp://ccab4aaf-tuya-ipc-terminal:8554/Back_door
+    stream_source: rtsp://46d52ae8-tuya-ipc-terminal:8554/Back_door
     name: "Back door"
 ```
 

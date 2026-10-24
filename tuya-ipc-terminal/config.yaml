@@ -13,9 +13,9 @@ boot: auto
 init: false
 watchdog: tcp://[HOST]:[PORT:8554]
 ports:
-  8554/tcp: 8554
+  8554/tcp: 8555
 ports_description:
-  8554/tcp: RTSP output (video, audio, two-way talkback backchannel)
+  8554/tcp: RTSP output host port (video, audio, two-way talkback backchannel)
 options:
   region: eu-central
   email: ""
