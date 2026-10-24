@@ -30,11 +30,10 @@ if ! has_session; then
         exit 1
     fi
     echo "No session found - authenticating ${email} in ${region}..."
-    # The tool reads the password with echo-off terminal I/O, so it needs a
-    # TTY even when the password comes from the configuration. 'script'
-    # provides the pseudo-terminal; the password is piped into it.
-    printf '%s\n' "${password}" \
-        | script -qec "${BIN} auth add ${region} ${email} --password" /dev/null
+    # The password is piped; our password-non-tty patch makes the tool read
+    # it as a plain line outside a terminal. Pipes are never echoed, so the
+    # password cannot end up in the logs.
+    printf '%s\n' "${password}" | "${BIN}" auth add "${region}" "${email}" --password
 fi
 
 echo "Authenticated users:"

@@ -18,13 +18,15 @@ RUN git clone https://github.com/seydx/tuya-ipc-terminal.git . \
     && git checkout "${TUYA_IPC_REF}"
 
 COPY patches/enable-speaker.patch /tmp/enable-speaker.patch
+COPY patches/password-non-tty.patch /tmp/password-non-tty.patch
 RUN git apply /tmp/enable-speaker.patch \
+    && git apply /tmp/password-non-tty.patch \
     && CGO_ENABLED=0 go build -o /out/tuya-ipc-terminal .
 
 # --- Runtime stage ---------------------------------------------------------
 FROM alpine:3.20
 
-RUN apk add --no-cache ca-certificates jq util-linux
+RUN apk add --no-cache ca-certificates jq
 
 COPY --from=build /out/tuya-ipc-terminal /bin/tuya-ipc-terminal
 COPY LICENSE-UPSTREAM /licenses/tuya-ipc-terminal-LICENSE
