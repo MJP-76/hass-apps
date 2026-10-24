@@ -1,0 +1,30 @@
+name: Tuya IPC Terminal
+version: "1.0.0"
+slug: tuya_ipc_terminal
+description: >-
+  Local RTSP bridge with two-way audio for Tuya and Energizer Connect cameras
+  and doorbells. Thin wrapper around seydx/tuya-ipc-terminal.
+url: https://github.com/MJP-76/hass-apps/tree/main/tuya-ipc-terminal
+arch:
+  - amd64
+  - aarch64
+startup: services
+boot: true
+init: false
+watchdog: tcp://[HOST]:[PORT:8554]
+ports:
+  8554/tcp: 8554
+ports_description:
+  8554/tcp: RTSP output (video, audio, two-way talkback backchannel)
+options:
+  region: eu-central
+  email: ""
+  password: ""
+  port: 8554
+  resolution: hd
+schema:
+  region: list(eu-central|eu-east|us-west|us-east|china|india)
+  email: email?
+  password: password?
+  port: port
+  resolution: list(hd|sd)
