@@ -48,9 +48,13 @@ echo "Refreshing camera discovery..."
 manual_count=$(jq -r '.manual_cameras | length' "${OPTIONS}" 2>/dev/null || echo 0)
 if [ "${manual_count}" != "0" ] && [ "${manual_count}" != "null" ]; then
     mkdir -p /data/.tuya-data
-    if [ ! -f /data/.tuya-data/cameras.json ]; then
-        echo '{"cameras":[],"lastUpdated":""}' > /data/.tuya-data/cameras.json
+    registry=/data/.tuya-data/cameras.json
+    if [ ! -f "${registry}" ]; then
+        echo '{"cameras":[],"lastUpdated":""}' > "${registry}"
     fi
+    # The tool saves "cameras": null when nothing was discovered - normalize.
+    jq '(.cameras) = (.cameras // [])' "${registry}" > "${registry}.tmp" \
+        && mv "${registry}.tmp" "${registry}"
     # The tool keys cameras by the userKey it derives at login; take it from
     # the session file it stored rather than guessing the slug rules.
     user_key=$(ls /data/.tuya-data/user_*.json 2>/dev/null | head -1 | sed 's|.*/user_||; s|\.json$||')
@@ -62,15 +66,17 @@ if [ "${manual_count}" != "0" ] && [ "${manual_count}" != "null" ]; then
         if [ -z "${cid}" ] || [ "${cid}" = "null" ]; then
             continue
         fi
-        exists=$(jq --arg id "${cid}" '[.cameras[] | select(.deviceId == $id)] | length' /data/.tuya-data/cameras.json)
+        exists=$(jq --arg id "${cid}" '[((.cameras // [])[]) | select(.deviceId == $id)] | length' "${registry}")
         if [ "${exists}" = "0" ]; then
             cpath="/$(printf '%s' "${cname}" | tr ' ' '_')"
             jq --arg id "${cid}" --arg name "${cname}" --arg path "${cpath}" --arg uk "${user_key}" \
-                '.cameras += [{"userKey":$uk,"deviceId":$id,"deviceName":$name,"category":"sp","rtspPath":$path,"productId":"","uuid":"","skill":""}]
+                '(.cameras) = ((.cameras // []) + [{"userKey":$uk,"deviceId":$id,"deviceName":$name,"category":"sp","rtspPath":$path,"productId":"","uuid":"","skill":""}])
                  | .lastUpdated = (now | todate)' \
-                /data/.tuya-data/cameras.json > /data/.tuya-data/cameras.json.tmp
-            mv /data/.tuya-data/cameras.json.tmp /data/.tuya-data/cameras.json
+                "${registry}" > "${registry}.tmp" \
+                && mv "${registry}.tmp" "${registry}"
             echo "Manual camera added: ${name} (${cid}) -> rtsp path ${cpath}"
+        else
+            echo "Manual camera already present: ${cname} (${cid})"
         fi
     done
 fi
