@@ -9,6 +9,7 @@ MJP-76. Each top-level folder is one add-on; Home Assistant's add-on store reads
 | App | What it does |
 | --- | --- |
 | [`tuya-ipc-terminal`](tuya-ipc-terminal/) | Local RTSP bridge with **two-way audio** for Tuya / Energizer Connect cameras and doorbells. A thin wrapper around [`seydx/tuya-ipc-terminal`](https://github.com/seydx/tuya-ipc-terminal). |
+| [`echolocal-installer`](echolocal-installer/) | Flashes and installs [EchoLocal](https://github.com/ygelfand/echolocal) onto an unlocked 2nd-gen Echo Dot over USB, from a sidebar panel. An add-on rather than an integration because flashing needs raw USB and `adb`. |
 
 ## Installing
 
