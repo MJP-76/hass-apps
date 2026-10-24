@@ -80,7 +80,7 @@ uninstall, and it adds no entities.
 2. Add:
 
    ```
-   https://github.com/MJP-76/echolocal-ha-addon
+   https://github.com/MJP-76/hass-apps
    ```
 
 3. Find **EchoLocal Installer** in the store and install it.

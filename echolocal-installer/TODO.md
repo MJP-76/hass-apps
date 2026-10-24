@@ -28,7 +28,7 @@ Single source of truth for outstanding work on this repository.
 
 ## Soon
 
-- [ ] Add `icon.png` and `logo.png` to `echolocal_installer/`.
+- [ ] Add `icon.png` and `logo.png` to `echolocal-installer/`.
 - [ ] Surface the post-install `echoctl status` output in the panel.
 
 ## Later

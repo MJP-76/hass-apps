@@ -72,4 +72,4 @@ verifies its SHA-256 against the release's `checksums.txt`. The binary and adb k
 
 The underlying tool is upstream: [ygelfand/echolocal](https://github.com/ygelfand/echolocal).
 Issues about this installer belong in
-[this repository](https://github.com/MJP-76/echolocal-ha-addon).
+[this repository](https://github.com/MJP-76/hass-apps/issues).

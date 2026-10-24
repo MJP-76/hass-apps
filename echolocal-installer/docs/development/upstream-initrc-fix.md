@@ -87,7 +87,7 @@ and friends and treats a non-zero exit as fatal.
 ## Remove the add-on workaround when…
 
 - A release is cut that contains the `ShellCode` change, **and**
-- `echolocal_installer/config.yaml` pins `echoctl_version` to it.
+- `echolocal-installer/config.yaml` pins `echoctl_version` to it.
 
 Then delete `apply_vendor_workaround` from `app/server.py`, drop the workaround note from the
 README, and close the **Soon** item in `TODO.md`.
