@@ -1,5 +1,5 @@
 name: Tuya IPC Terminal
-version: "1.0.3"
+version: "1.0.4"
 slug: tuya_ipc_terminal
 description: >-
   Local RTSP bridge with two-way audio for Tuya and Energizer Connect cameras
@@ -22,9 +22,13 @@ options:
   password: ""
   port: 8554
   resolution: hd
+  manual_cameras: []
 schema:
   region: list(eu-central|eu-east|us-west|us-east|china|india)
   email: email?
   password: password?
   port: port
   resolution: list(hd|sd)
+  manual_cameras:
+    - id: str
+      name: str

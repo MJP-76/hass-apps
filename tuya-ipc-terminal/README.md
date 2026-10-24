@@ -45,6 +45,22 @@ talkback. Keep the patch applying cleanly (`git apply` fails loudly otherwise).
 | `password` | *(empty)* | Account password; used **once** to create a session |
 | `port` | `8554` | RTSP listen port |
 | `resolution` | `hd` | `hd` (main stream) or `sd` (sub-stream) |
+| `manual_cameras` | *(empty)* | Escape hatch: cameras discovery cannot see (see below) |
+
+### Manual cameras
+
+Discovery lists only devices that sit **inside a room** in the app. If a camera
+is invisible to discovery (for example a doorbell placed directly under the
+home), add it explicitly:
+
+```yaml
+manual_cameras:
+  - id: bf73e7f6611ef7daa84j6b   # Tuya device ID (from the Tuya portal or logs)
+    name: Back door              # becomes the RTSP path: /Back_door
+```
+
+The entry is injected into the tool's camera registry at startup; the stream is
+negotiated live per device, exactly like a discovered camera.
 
 The password is stored in the add-on's configuration by your Supervisor like
 any other add-on credential. It is only read when no session exists yet.
