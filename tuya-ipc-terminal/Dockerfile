@@ -19,8 +19,10 @@ RUN git clone https://github.com/seydx/tuya-ipc-terminal.git . \
 
 COPY patches/enable-speaker.patch /tmp/enable-speaker.patch
 COPY patches/password-non-tty.patch /tmp/password-non-tty.patch
+COPY patches/discovery-diagnostics.patch /tmp/discovery-diagnostics.patch
 RUN git apply /tmp/enable-speaker.patch \
     && git apply /tmp/password-non-tty.patch \
+    && git apply /tmp/discovery-diagnostics.patch \
     && CGO_ENABLED=0 go build -o /out/tuya-ipc-terminal .
 
 # --- Runtime stage ---------------------------------------------------------
