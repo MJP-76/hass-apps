@@ -1,8 +1,0 @@
----
-configuration:
-  echoctl_version:
-    name: echoctl version
-    description: >-
-      Version of the EchoLocal host CLI (echoctl) to download and run. Keep pinned at the
-      version this add-on is tested against; bump only after verifying a new release. 0.0.8
-      is the version for SDK 25 devices.
