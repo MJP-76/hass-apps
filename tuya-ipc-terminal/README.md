@@ -78,6 +78,48 @@ into the add-on's `/data/.tuya-data/`.
 If the session expires (for example after Tuya terms changes), re-set the
 password option and restart.
 
+## Finding the device ID and local key
+
+Both values come from the Tuya Developer Platform. The **device ID** feeds
+[`manual_cameras`](#manual-cameras) above; the **local key** is needed by the
+local event integration (e.g. `lsc_tuya_doorbell`) that reports doorbell presses
+and motion.
+
+### 1. Create a developer account & project
+
+- Go to the Tuya Developer Platform and sign in or register for a free account.
+- Navigate to **Cloud → Project Management** and click **Create Project**.
+- Choose a project name, select **Smart Home** as the industry, pick your data
+  center (make sure it matches the region of your mobile app), and ensure the
+  **IoT Core** service is enabled.
+
+### 2. Link your Smart Life / Tuya app account
+
+- Open your new project and go to **Devices → Link App Account**.
+- Click **Add App Account** and select the QR code option.
+- Open the Tuya Smart or Smart Life app on your phone, tap the scan button in
+  the top-right corner, and scan the QR code on your computer screen to
+  authorize.
+
+### 3. Get the device ID
+
+- In the project, go to **Devices** and locate your device.
+- Copy the **Device ID** (or Virtual ID) listed for it.
+- Alternative from the app: open the device control page, tap **···** (or the
+  edit icon) in the top right, and select **Device Information**.
+
+### 4. Retrieve the local key via API Explorer
+
+- On the platform, go to **Cloud → API Explorer**.
+- Select **Device Management** (or *General Device Capabilities*) →
+  **Query Device Details** (or *Get Device Information*).
+- Paste your Device ID into the required field and click **Submit Request**.
+- Find the **`local_key`** field in the JSON response on the right pane.
+
+> ⚠️ The local key **changes whenever the device is re-paired** in the app. If
+> a local integration suddenly refuses to connect after re-pairing, re-fetch the
+> key and reauthenticate.
+
 ## Using the streams
 
 The add-on serves one RTSP endpoint per camera. There are two ways to reach it:
