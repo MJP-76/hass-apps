@@ -66,17 +66,29 @@ if [ "${manual_count}" != "0" ] && [ "${manual_count}" != "null" ]; then
         if [ -z "${cid}" ] || [ "${cid}" = "null" ]; then
             continue
         fi
+        cpath="/$(printf '%s' "${cname}" | tr ' ' '_')"
         exists=$(jq --arg id "${cid}" '[((.cameras // [])[]) | select(.deviceId == $id)] | length' "${registry}")
         if [ "${exists}" = "0" ]; then
-            cpath="/$(printf '%s' "${cname}" | tr ' ' '_')"
             jq --arg id "${cid}" --arg name "${cname}" --arg path "${cpath}" --arg uk "${user_key}" \
                 '(.cameras) = ((.cameras // []) + [{"userKey":$uk,"deviceId":$id,"deviceName":$name,"category":"sp","rtspPath":$path,"productId":"","uuid":"","skill":""}])
                  | .lastUpdated = (now | todate)' \
                 "${registry}" > "${registry}.tmp" \
                 && mv "${registry}.tmp" "${registry}"
-            echo "Manual camera added: ${name} (${cid}) -> rtsp path ${cpath}"
+            echo "Manual camera added: ${cname} (${cid}) -> rtsp path ${cpath}"
         else
-            echo "Manual camera already present: ${cname} (${cid})"
+            # Already registered: keep the entry in sync when the configured
+            # name (and therefore the RTSP path) has changed.
+            cur_path=$(jq -r --arg id "${cid}" '((.cameras // [])[] | select(.deviceId == $id) | .rtspPath)' "${registry}")
+            if [ "${cur_path}" != "${cpath}" ]; then
+                jq --arg id "${cid}" --arg name "${cname}" --arg path "${cpath}" \
+                    '(.cameras) = [((.cameras // [])[]) | if .deviceId == $id then .deviceName = $name | .rtspPath = $path else . end]
+                     | .lastUpdated = (now | todate)' \
+                    "${registry}" > "${registry}.tmp" \
+                    && mv "${registry}.tmp" "${registry}"
+                echo "Manual camera updated: ${cname} (${cid}) -> rtsp path ${cpath} (was ${cur_path})"
+            else
+                echo "Manual camera already present: ${cname} (${cid})"
+            fi
         fi
     done
 fi

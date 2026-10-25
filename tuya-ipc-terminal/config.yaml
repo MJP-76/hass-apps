@@ -1,5 +1,5 @@
 name: Tuya IPC Terminal
-version: "1.0.5"
+version: "1.0.6"
 slug: tuya_ipc_terminal
 description: >-
   Local RTSP bridge with two-way audio for Tuya and Energizer Connect cameras
