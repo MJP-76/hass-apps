@@ -8,7 +8,6 @@ MJP-76. Each top-level folder is one add-on; Home Assistant's add-on store reads
 
 | App | What it does |
 | --- | --- |
-| [`tuya-ipc-terminal`](tuya-ipc-terminal/) | Local RTSP bridge with **two-way audio** for Tuya / Energizer Connect cameras and doorbells. A thin wrapper around [`seydx/tuya-ipc-terminal`](https://github.com/seydx/tuya-ipc-terminal). |
 
 ## Installing
 
